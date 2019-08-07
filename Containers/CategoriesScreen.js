@@ -10,28 +10,20 @@ import styles from "./Styles/CategoriesScreenStyles";
 import TabBar from "../Components/TabBar";
 import NavBar from "../Components/NavBar";
 import CategoryRow from "../Components/CategoryRow";
-
-const dataList =[
-    {
-      "id": "1",
-      "name": "Fish"
-    },
-    {
-      "id": "2",
-      "name": "Meat"
-    },
-    {
-      "id": "3",
-      "name": "Breakfast"
-    }
-  ];
+import { observer, inject} from "mobx-react";
 
 
+@inject("recipes")
+@observer
 export default class CategoriesScreen extends Component
 {
   constructor(props)
   {
     super(props);
+  }
+  componentDidMount = () => {
+    const { recipes } = this.props;
+    recipes.getCategories();
   }
   keyExtractor = (item, index) => item.id;
   renderRow = ({item}) =>
@@ -39,11 +31,12 @@ export default class CategoriesScreen extends Component
     return <CategoryRow data ={item}/>
   };
   renderList = () =>{
+    const { recipes } = this.props;
     return(
       <FlatList
       contentContainerStyle={styles.listContent}
       keyExtractor={this.keyExtractor}
-      data={dataList}
+      data={recipes.categoriesSource}
       renderItem={this.renderRow}
       />
     );

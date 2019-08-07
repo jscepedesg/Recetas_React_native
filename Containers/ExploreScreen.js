@@ -101,7 +101,7 @@ const recipeDate = {
     "Rinse fish, rub with lemon or lime, seasoned with salt and pepper or use your favorite",
     "photo": "http://www.themealdb.com/images/media/meals/1520084413.jpg"
 }
-@inject("test")
+@inject("test","recipes")
 @observer
 export default class ExploreScreen extends Component
 {
@@ -117,7 +117,12 @@ export default class ExploreScreen extends Component
     const { test } = this.props;
     test.start();
   }
-
+  componentDidMount = () => 
+  {
+    const {recipes} = this.props;
+    recipes.getRecipes();
+    recipes.getRecommended(); 
+  }
   componentDidUpdate = (prevProps, prevState) => {
     const { test } = this.props;
     if(test.counter >= 5)
@@ -127,18 +132,20 @@ export default class ExploreScreen extends Component
   };
   keyExtractor = (item, index) => item.id;
   renderList = () =>{
+    const {recipes} = this.props;
     return(
       <FlatList
       ListHeaderComponent={this.renderRecommended}
       keyExtractor={this.keyExtractor}
-      data={dataList}
+      data={recipes.recipesSource}
       renderItem={({ item})=> <RecipeRow data={item}/>}
       />
     );
   };
   renderRecommended = () => 
   {
-    return <RecommendationBox data= {dataList}/>
+    const {recipes} = this.props;
+    return <RecommendationBox data= {recipes.recommendedSource}/>
   };
   render()
   {

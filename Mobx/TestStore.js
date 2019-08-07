@@ -1,5 +1,5 @@
-import { observable, computed } from "mobx";
-
+import { observable, computed, configure, action } from "mobx";
+//configure({enforceActions: "always"});
 class TestStore 
 {
     @observable counter = 0;
@@ -19,8 +19,14 @@ class TestStore
     start()
     {
         this.timer = setInterval(()=> {
-            this.counter++;
+            this.increment();
           },1000);
+    }
+
+    @action
+    increment()
+    {
+        this.counter++;
     }
     stop()
     {
